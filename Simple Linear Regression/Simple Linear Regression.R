@@ -32,7 +32,11 @@ lm.fit
 # display the linear model's fit parameters and statistics
 summary(lm.fit)
 ### The values so lstat is significant
-
+#Coefficients:
+#            Estimate Std. Error    t value  Pr(>|t|)    
+#(Intercept)   34.55384    0.56263   61.41   <2e-16 ***
+#  lstat       -0.95005    0.03873  -24.53   <2e-16 ***
+  
 names(lm.fit)
 coef(lm.fit)
 confint(lm.fit)
