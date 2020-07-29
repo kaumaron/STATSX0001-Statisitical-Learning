@@ -5,6 +5,7 @@
  
  * [Intro to R](Intro%20to%20R)
  * [Simple Linear Regression](Simple%20Linear%20Regression)
+ * [Classification](Classification)
  
  ## Data
  
