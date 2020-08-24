@@ -22,3 +22,40 @@ summary(glm.fit)
 # Which of the following do you think is most likely given what you see?
 
 matplot(Xy, type="l")
+
+# There's a lot of autocorrelation in the data so SE(beta_1^hat) is too low
+
+
+# 5.R.R3
+# Now, use the (standard) bootstrap to estimate  𝑠.𝑒.(𝛽̂ 1) .
+# To within 10%, what do you get?
+
+require(boot)
+?boot
+
+# Function for bootstrap fit of beta_1
+# 1 indexed?! (intercept, X1, X2)[2]
+boot.fn <- function(data,index)
+  return(coef(glm(y~X1+X2, data = data, subset = index))[2])
+
+# test on first 100 datapoints
+boot.fn(Xy, 1:100)
+
+# compute 1000 bootstrap samples
+boot(Xy ,boot.fn ,1000)
+
+# 5.R.R4
+# Finally, use the block bootstrap to estimate SE(beta_1).
+# Use blocks of 100 contiguous observations, and resample 
+# ten whole blocks with replacement then paste them together to 
+# construct each bootstrap time series. For example, 
+# one of your bootstrap resamples could be:
+# new.rows = c(101:200, 401:500, 101:200, 901:1000, 301:400,
+# 1:100, 1:100, 801:900, 201:300, 701:800)
+# new.Xy = Xy[new.rows, ]
+# To within 10%, what do you get?
+
+
+# https://stat.ethz.ch/R-manual/R-devel/library/boot/html/tsboot.html
+?tsboot
+tsboot(Xy, boot.fn, sim='fixed', l=100, R=1000)
