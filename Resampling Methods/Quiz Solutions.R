@@ -58,4 +58,15 @@ boot(Xy ,boot.fn ,1000)
 
 # https://stat.ethz.ch/R-manual/R-devel/library/boot/html/tsboot.html
 ?tsboot
-tsboot(Xy, boot.fn, sim='fixed', l=100, R=1000)
+
+# beta_hat_1 from https://justinmshea.github.io/StatisticalLearning/articles/quiz-05-CV-Resampling-Methods.html#r-r4
+# not sure why boot.fn doesn't work here.
+tsboot(Xy, boot.fn, sim='fixed', l=100, R=15000)
+# Gives error:
+#  Error in eval(substitute(subset), data, env) : 
+# argument "index" is missing, with no default 
+beta_hat_1 <- function(data, index, formula) {
+  model <- lm(formula, data = data[index, ])
+  summary(model)$coefficients[2, 1]
+}
+tsboot(Xy, beta_hat_1,formula = y~X1+X2, sim='fixed', l=100, R=15000)
