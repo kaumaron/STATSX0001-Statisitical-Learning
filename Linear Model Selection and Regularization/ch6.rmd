@@ -61,6 +61,7 @@ Lets make a training and validation set, so that we can choose a good subset mod
 We will do it using a slightly different approach from what was done in the the book.
 ```{r}
 dim(Hitters)
+# reproducibility
 set.seed(1)
 train=sample(seq(263),180,replace=FALSE)
 train
@@ -69,12 +70,15 @@ regfit.fwd=regsubsets(Salary~.,data=Hitters[train,],nvmax=19,method="forward")
 Now we will make predictions on the observations not used for training. We know there are 19 models, so we set up some vectors to record the errors. We have to do a bit of work here, because there is no predict method for `regsubsets`.
 ```{r}
 val.errors=rep(NA,19)
-x.test=model.matrix(Salary~.,data=Hitters[-train,])# notice the -index!
+# notice the -index!
+# all but the training data -- different than python's - index
+x.test=model.matrix(Salary~.,data=Hitters[-train,])
 for(i in 1:19){
   coefi=coef(regfit.fwd,id=i)
   pred=x.test[,names(coefi)]%*%coefi
   val.errors[i]=mean((Hitters$Salary[-train]-pred)^2)
 }
+# plot training and validation errors
 plot(sqrt(val.errors),ylab="Root MSE",ylim=c(300,400),pch=19,type="b")
 points(sqrt(regfit.fwd$rss[-1]/180),col="blue",pch=19,type="b")
 legend("topright",legend=c("Training","Validation"),col=c("blue","black"),pch=19)
